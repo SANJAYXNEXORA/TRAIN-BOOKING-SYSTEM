@@ -1,0 +1,175 @@
+import mysql.connector as tor
+import random
+print("""TRAIN BOOKING SYSTEM""")
+print("""..............""")
+print()
+print()
+print("USER LOGIN")
+print("""1:ENTER 1 FOR REGISTER
+2: ENTER 2 FOR LOGIN""")
+a=int(input("ENTER:"))
+if a ==1:
+    my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+    h=my.cursor()
+    u=input("USERNAME:")
+    p=input("PASSWORD:")
+    q="insert into users(USERNAME,PASSWORD)values('{}','{}')".format(u,p)
+    h.execute(q)
+    my.commit()
+    print("REGISTERED SUCCESSFULLY")
+    my.close()
+elif a ==2:
+    my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+    h=my.cursor()
+    u=input('USERNAME:')
+    p=input('PASSWORD:')
+    k="select * from users where USERNAME ='{}' and PASSWORD ='{}'".format(u,p)
+    h.execute(k)
+    result=h.fetchone()
+    if result:
+        print('LOGINED!')
+        while True:
+            print()
+            print("TRAIN BOOKING SYSTEM")
+            print("--------------------")
+            print("1: TRAIN DETAILS")
+            print("2: SEARCH TRAINS")
+            print("3: BOOK TICKET")
+            print("4: CANCEL TICKET")
+            print("5: VIEW BOOKINGS")
+            print("6: EXIT")
+            ch=int(input("ENTER YOUR CHOICE:"))
+            if ch == 1:
+                my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+                h=my.cursor()
+                h.execute("select * from trains")
+                data=h.fetchall()
+                print()
+                print("TRAIN DETAILS")
+                print("-------------")
+                for x in data:
+                    print("TRAIN NUMBER:",x[0])
+                    print("TRAIN NAME:",x[1])
+                    print("SOURCE:",x[2])
+                    print("DESTINATION:",x[3])
+                    print("DEPARTURE TIME:",x[4])
+                    print("ARRIVAL TIME:",x[5])
+                    print("AVAILABLE SEATS:",x[6])
+                    print("FARE:",x[7])
+                    print("--------------------")
+                my.close()
+            elif ch == 2:
+                my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+                h=my.cursor()
+                s=input("SOURCE:")
+                d=input("DESTINATION:")
+                q="select * from trains where SOURCE='{}' and DESTINATION='{}'".format(s,d)
+                h.execute(q)
+                data=h.fetchall()
+                if data:
+                    print()
+                    print("MATCHING TRAINS")
+                    print("----------------")
+                    for x in data:
+                        print("TRAIN NUMBER:",x[0])
+                        print("TRAIN NAME:",x[1])
+                        print("SOURCE:",x[2])
+                        print("DESTINATION:",x[3])
+                        print("DEPARTURE TIME:",x[4])
+                        print("ARRIVAL TIME:",x[5])
+                        print("AVAILABLE SEATS:",x[6])
+                        print("FARE:",x[7])
+                        print("--------------------")
+                else:
+                    print("NO TRAIN FOUND!")
+                my.close()
+            elif ch == 3:
+                my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+                h=my.cursor()
+                print()
+                print("BOOK TICKET")
+                print("-----------")
+                n=input("PASSENGER NAME:")
+                age=int(input("AGE:"))
+                g=input("GENDER:")
+                tn=int(input("TRAIN NUMBER:"))
+                bd=input("BOOKING DATE:")
+                q="select * from trains where TRAIN_NO={}".format(tn)
+                h.execute(q)
+                train=h.fetchone()
+                if train:
+                    seats=train[6]
+                    fare=train[7]
+                    if seats > 0:
+                        seat=50-seats+1
+                        pnr="PNR"+str(random.randint(10000,99999))
+                        q="insert into bookings(PNR,PASSENGER_NAME,AGE,GENDER,TRAIN_NO,SEAT_NO,FARE,BOOKING_DATE)values('{}','{}',{},'{}',{},{},{},'{}')".format(pnr,n,age,g,tn,seat,fare,bd)
+                        h.execute(q)
+                        q="update trains set AVAILABLE_SEATS=AVAILABLE_SEATS-1 where TRAIN_NO={}".format(tn)
+                        h.execute(q)
+                        my.commit()
+                        print()
+                        print("TICKET BOOKED SUCCESSFULLY")
+                        print("PNR:",pnr)
+                        print("PASSENGER NAME:",n)
+                        print("TRAIN NUMBER:",tn)
+                        print("SEAT NUMBER:",seat)
+                        print("FARE:",fare)
+                    else:
+                        print("NO AVAILABLE SEATS!")
+                else:
+                    print("TRAIN NOT FOUND!")
+                my.close()
+            elif ch == 4:
+                my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+                h=my.cursor()
+                pnr=input("ENTER PNR:")
+                q="select TRAIN_NO from bookings where PNR='{}'".format(pnr)
+                h.execute(q)
+                data=h.fetchone()
+                if data:
+                    tn=data[0]
+                    q="delete from bookings where PNR='{}'".format(pnr)
+                    h.execute(q)
+                    q="update trains set AVAILABLE_SEATS=AVAILABLE_SEATS+1 where TRAIN_NO={}".format(tn)
+                    h.execute(q)
+                    my.commit()
+                    print("BOOKING CANCELLED")
+                    print("AVAILABLE SEAT INCREASED")
+                else:
+                    print("INVALID PNR!")
+                my.close()
+            elif ch == 5:
+                my=tor.connect(host='localhost',user='root',password='12345678',database='register')
+                h=my.cursor()
+                h.execute("select * from bookings")
+                data=h.fetchall()
+                print()
+                print("ALL BOOKED TICKETS")
+                print("------------------")
+                if data:
+                    for x in data:
+                        print("PNR:",x[0])
+                        print("PASSENGER NAME:",x[1])
+                        print("AGE:",x[2])
+                        print("GENDER:",x[3])
+                        print("TRAIN NUMBER:",x[4])
+                        print("SEAT NUMBER:",x[5])
+                        print("FARE:",x[6])
+                        print("BOOKING DATE:",x[7])
+                        print("--------------------")
+                else:
+                    print("NO BOOKINGS FOUND!")
+                my.close()
+            elif ch == 6:
+                print("THANK YOU FOR USING TRAIN BOOKING SYSTEM")
+                break
+            else:
+                print("WRONG CHOICE!")
+        my.close()
+    else:
+        print("CHECK YOUR USERNAME AND PASSWORD!")
+else:
+    print("YOU HAVE ENTERED A WRONG CHOICE")   
+        
+
