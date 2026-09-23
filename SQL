@@ -1,0 +1,15 @@
+import mysql.connector as tor
+
+my=tor.connect(host="localhost",user="root",password="12345678")
+cur=my.cursor()
+cur.execute("CREATE DATABASE IF NOT EXISTS register")
+cur.execute("USE register")
+cur.execute("""CREATE TABLE IF NOT EXISTS passengers(NAME VARCHAR(50),AGE INT,GENDER VARCHAR(1),TRAIN_NO INT,TRAIN_NAME VARCHAR(50),BOOKING_DATE VARCHAR(50),PNR VARCHAR(20),SEAT_NO INT)""")
+
+cur.execute("""CREATE TABLE IF NOT EXISTS trains(TRAIN_NO INT,TRAIN_NAME VARCHAR(50),SOURCE VARCHAR(50),DEST VARCHAR(50),TIME VARCHAR(50),FARE INT,AVAILABLE_SEATS INT)""")
+
+cur.execute("""CREATE TABLE IF NOT EXISTS users(USERNAME VARCHAR(50),PASSWORD VARCHAR(50))""")
+
+my.commit()
+
+my.close()
