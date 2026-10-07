@@ -1,15 +1,46 @@
 import mysql.connector as tor
 
-my=tor.connect(host="localhost",user="root",password="12345678")
-cur=my.cursor()
-cur.execute("CREATE DATABASE IF NOT EXISTS register")
-cur.execute("USE register")
-cur.execute("""CREATE TABLE IF NOT EXISTS passengers(NAME VARCHAR(50),AGE INT,GENDER VARCHAR(1),TRAIN_NO INT,TRAIN_NAME VARCHAR(50),BOOKING_DATE VARCHAR(50),PNR VARCHAR(20),SEAT_NO INT)""")
+my=tor.connect(host='localhost',user='root',password='12345678')
+h=my.cursor()
 
-cur.execute("""CREATE TABLE IF NOT EXISTS trains(TRAIN_NO INT,TRAIN_NAME VARCHAR(50),SOURCE VARCHAR(50),DEST VARCHAR(50),TIME VARCHAR(50),FARE INT,AVAILABLE_SEATS INT)""")
+h.execute("create database if not exists register")
+h.execute("use register")
 
-cur.execute("""CREATE TABLE IF NOT EXISTS users(USERNAME VARCHAR(50),PASSWORD VARCHAR(50))""")
+h.execute("""create table if not exists users(
+USERNAME varchar(50),
+PASSWORD varchar(50))""")
+
+h.execute("""create table if not exists trains(
+TRAIN_NO int,
+TRAIN_NAME varchar(50),
+SOURCE varchar(50),
+DEST varchar(50),
+TIME varchar(50),
+FARE int,
+AVAILABLE_SEATS int)""")
+
+h.execute("""create table if not exists passengers(
+NAME varchar(50),
+AGE int,
+GENDER varchar(1),
+TRAIN_NO int,
+TRAIN_NAME varchar(50),
+BOOKING_DATE varchar(50),
+PNR varchar(20),
+SEAT_NO int)""")
+
+h.execute("""create table if not exists bookings(
+PNR varchar(20),
+PASSENGER_NAME varchar(50),
+AGE int,
+GENDER varchar(1),
+TRAIN_NO int,
+SEAT_NO int,
+FARE int,
+BOOKING_DATE varchar(50))""")
 
 my.commit()
+
+print("TABLES CREATED SUCCESSFULLY")
 
 my.close()
