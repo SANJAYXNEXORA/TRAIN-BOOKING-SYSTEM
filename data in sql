@@ -1,0 +1,29 @@
+
+mysql> SELECT * FROM bookings;
++----------+----------------+------+--------+----------+---------+------+--------------+
+| PNR      | PASSENGER_NAME | AGE  | GENDER | TRAIN_NO | SEAT_NO | FARE | BOOKING_DATE |
++----------+----------------+------+--------+----------+---------+------+--------------+
+| PNR97190 | sanjay         |   18 | m      |    12625 |       1 |  500 | 07-10-2026   |
++----------+----------------+------+--------+----------+---------+------+--------------+
+1 row in set (0.012 sec)
+
+mysql> SELECT * FROM passengers;
+Empty set (0.006 sec)
+
+mysql> SELECT * FROM trains;
++----------+-----------------+----------+-----------+----------+------+-----------------+
+| TRAIN_NO | TRAIN_NAME      | SOURCE   | DEST      | TIME     | FARE | AVAILABLE_SEATS |
++----------+-----------------+----------+-----------+----------+------+-----------------+
+|    12625 | Kerala Express  | Kottayam | New Delhi | 10:30 AM |  500 |              50 |
+|    12626 | Malabar Express | Kochi    | Chennai   | 08:00 AM |  450 |              50 |
+|    12627 | Venad Express   | Kollam   | Ernakulam | 07:00 AM |  200 |              50 |
++----------+-----------------+----------+-----------+----------+------+-----------------+
+3 rows in set (0.006 sec)
+
+mysql> SELECT * FROM users;
++----------+----------+
+| USERNAME | PASSWORD |
++----------+----------+
+| sanjay   | 1234     |
++----------+----------+
+2 rows in set (0.018 sec)
